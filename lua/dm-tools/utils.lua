@@ -1,4 +1,4 @@
-local config = require("dm-utils.config")
+local config = require("dm-tools.config")
 local M = {}
 
 --- Debug a table in a new window

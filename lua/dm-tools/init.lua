@@ -1,6 +1,6 @@
-local scenes = require("dm-utils.scenes")
-local spotify = require("dm-utils.spotify")
-local config = require("dm-utils.config")
+local scenes = require("dm-tools.scenes")
+local spotify = require("dm-tools.spotify")
+local config = require("dm-tools.config")
 
 local M = {}
 

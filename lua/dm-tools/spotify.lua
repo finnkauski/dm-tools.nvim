@@ -10,4 +10,16 @@ M.login = function()
   }))
 end
 
+M.pause = function()
+  return utils.debug(curl.get({
+    url = utils.toolkit_url("/spotify/pause"),
+  }))
+end
+
+M.resume = function()
+  return utils.debug(curl.get({
+    url = utils.toolkit_url("/spotify/resume"),
+  }))
+end
+
 return M
