@@ -1,5 +1,5 @@
 local curl = require("plenary.curl")
-local utils = require("dm-utils.utils")
+local utils = require("dm-tools.utils")
 
 M = {}
 
