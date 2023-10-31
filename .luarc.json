@@ -1,0 +1,8 @@
+{
+    "workspace.library": [
+        "/Users/definitely.artful/.local/share/nvim/lazy/neodev.nvim/types/nightly",
+        "/Users/definitely.artful/.local/share/bob/nightly/nvim-macos/share/nvim/runtime/lua",
+        "/Users/definitely.artful/projects/dm-helper/dm-utils.nvim/lua",
+        "${3rd}/luv/library"
+    ]
+}
