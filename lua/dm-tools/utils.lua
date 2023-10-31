@@ -1,6 +1,11 @@
 local config = require("dm-tools.config")
 local M = {}
 
+--- @param response table
+M.parse = function(response)
+  return vim.json.decode(response.body, {})
+end
+
 --- Debug a table in a new window
 --- @param response table
 M.debug = function(response)
