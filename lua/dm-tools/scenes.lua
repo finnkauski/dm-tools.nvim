@@ -12,28 +12,12 @@ local default_scene_entry_maker = function(entry)
     group = " (" .. group .. ")"
   end
   local name = entry["name"] .. group
+
   return {
     value = entry,
     display = name,
     ordinal = name,
   }
-end
-
---- Get a given scene
---- @param scene string
---- @param raw boolean
-M.get = function(scene, raw)
-  local name = scene or vim.fn.input("Scene name: ")
-
-  local response = curl.get({
-    url = utils.toolkit_url("/scene/get/" .. name),
-  })
-
-  if raw then
-    return utils.parse(response)
-  end
-
-  return utils.debug(response)
 end
 
 --- Set new scene
@@ -53,11 +37,12 @@ local function set_scene(scene, raw)
   return utils.debug(response)
 end
 
-M.set = set_scene
+--- Set one scene rather than listing them all
+M.set_one = set_scene
 
---- List all scenes
+--- List all scenes and set the selected one
 --- @param raw boolean
-M.list = function(raw)
+M.set = function(raw)
   local response = curl.get({
     url = utils.toolkit_url("/scene/list"),
   })
@@ -79,5 +64,23 @@ M.list = function(raw)
     set_scene(entry.value["identifier"], false)
   end, {})
 end
+
+--- Get a given scene
+--- @param scene string
+--- @param raw boolean
+M.get = function(scene, raw)
+  local name = scene or vim.fn.input("Scene name: ")
+
+  local response = curl.get({
+    url = utils.toolkit_url("/scene/get/" .. name),
+  })
+
+  if raw then
+    return utils.parse(response)
+  end
+
+  return utils.debug(response)
+end
+
 
 return M
