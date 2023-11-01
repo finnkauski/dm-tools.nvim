@@ -20,6 +20,25 @@ local default_scene_entry_maker = function(entry)
   }
 end
 
+--- Get a given scene
+--- @param scene string
+--- @param raw boolean
+local function get_scene(scene, raw)
+  local name = scene or vim.fn.input("Scene name: ")
+
+  local response = curl.get({
+    url = utils.toolkit_url("/scene/get/" .. name),
+  })
+
+  if raw then
+    return utils.parse(response)
+  end
+
+  return utils.debug(response)
+end
+
+M.get_scene = get_scene
+
 --- Set new scene
 --- @param scene string
 --- @param raw boolean
@@ -38,7 +57,7 @@ local function set_scene(scene, raw)
 end
 
 --- Set one scene rather than listing them all
-M.set_one = set_scene
+M.set_scene = set_scene
 
 --- List all scenes and set the selected one
 --- @param raw boolean
@@ -62,25 +81,48 @@ M.set = function(raw)
   -- picker setup
   utils.new_picker(results, default_scene_entry_maker, function(entry)
     set_scene(entry.value["identifier"], false)
-  end, {})
+  end, function(entry)
+    local e = entry.value
+
+    -- Check for Spotify
+    local spotify_enabled = "No"
+    if e["spotify"] ~= nil then
+      spotify_enabled = "Yes"
+    end
+
+    local info = {
+      "Name:    " .. e["name"],
+      "Group:   " .. (e["group"] or "N/A"),
+      "",
+      "Spotify: " .. spotify_enabled,
+    }
+
+    -- Add the lights
+    if e["lights"] ~= nil then
+      table.insert(info, "Lights:  ")
+      for key, _ in pairs(e["lights"]) do
+        table.insert(info, "- " .. key)
+      end
+    end
+
+    -- Add the links
+    if e["links"] ~= nil then
+      table.insert(info, "Links:   ")
+      local n = 0
+      for _, val in ipairs(e["links"]) do
+        if n == 2 then
+          break
+        end
+        table.insert(info, "- " .. val)
+        n = n + 1
+      end
+      if n == 2 then
+        table.insert(info, "...")
+      end
+    end
+
+    return info
+  end)
 end
-
---- Get a given scene
---- @param scene string
---- @param raw boolean
-M.get = function(scene, raw)
-  local name = scene or vim.fn.input("Scene name: ")
-
-  local response = curl.get({
-    url = utils.toolkit_url("/scene/get/" .. name),
-  })
-
-  if raw then
-    return utils.parse(response)
-  end
-
-  return utils.debug(response)
-end
-
 
 return M
