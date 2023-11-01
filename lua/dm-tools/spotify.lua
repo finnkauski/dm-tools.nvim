@@ -49,7 +49,7 @@ M.login = function(raw)
   end
 
   if response.status == 200 then
-    print("Please see your browser for login screen.")
+    print("Please see your browser for login screen")
   else
     utils.debug(response)
   end
@@ -85,7 +85,7 @@ M.pause = function(raw)
   end
 
   if response.status == 200 then
-    print("Paused.")
+    print("Paused")
   else
     utils.debug(response)
   end
@@ -103,7 +103,7 @@ M.resume = function(raw)
   end
 
   if response.status == 200 then
-    print("► Resumed.")
+    print("► Resumed")
   else
     utils.debug(response)
   end

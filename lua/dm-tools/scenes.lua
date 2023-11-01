@@ -4,32 +4,19 @@ local utils = require("dm-tools.utils")
 -- Top level module table
 M = {}
 
---- List all scenes
---- @param raw boolean
-M.list = function(raw)
-  local response = curl.get({
-    url = utils.toolkit_url("/scene/list"),
-  })
-
-  if raw then
-    return utils.parse(response)
+--- Make default entry maker to translate a
+--- @param entry table
+local default_scene_entry_maker = function(entry)
+  local group = (entry["group"] or "")
+  if group ~= "" then
+    group = " (" .. group .. ")"
   end
-
-  return utils.debug(response)
-end
-
---- List all groups
---- @param raw boolean
-M.groups = function(raw)
-  local response = curl.get({
-    url = utils.toolkit_url("/scene/groups"),
-  })
-
-  if raw then
-    return utils.parse(response)
-  end
-
-  return utils.debug(response)
+  local name = entry["name"] .. group
+  return {
+    value = entry,
+    display = name,
+    ordinal = name,
+  }
 end
 
 --- Get a given scene
@@ -52,7 +39,7 @@ end
 --- Set new scene
 --- @param scene string
 --- @param raw boolean
-M.set = function(scene, raw)
+local function set_scene(scene, raw)
   local name = scene or vim.fn.input("Scene name: ")
 
   local response = curl.put({
@@ -64,6 +51,33 @@ M.set = function(scene, raw)
   end
 
   return utils.debug(response)
+end
+
+M.set = set_scene
+
+--- List all scenes
+--- @param raw boolean
+M.list = function(raw)
+  local response = curl.get({
+    url = utils.toolkit_url("/scene/list"),
+  })
+
+  local data = utils.parse(response).data
+
+  if raw then
+    return data
+  end
+
+  local results = {}
+  for key, value in pairs(data) do
+    value["identifier"] = key
+    table.insert(results, value)
+  end
+
+  -- picker setup
+  utils.new_picker(results, default_scene_entry_maker, function(entry)
+    set_scene(entry.value["identifier"], false)
+  end, {})
 end
 
 return M
