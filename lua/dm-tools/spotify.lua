@@ -31,7 +31,9 @@ M.authenticated = function(raw)
   local is_authenticated = utils.parse(response).data
 
   if response.status == 200 and is_authenticated then
-    print("Spotify authenticated")
+    print("Authenticated")
+  elseif response.status == 200 and not is_authenticated then
+    print("Unauthenticated")
   else
     utils.debug(response)
   end

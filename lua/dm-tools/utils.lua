@@ -37,7 +37,7 @@ end
 --- @param opts table
 M.new_picker = function(results, entry_maker, exec_fn, gen_preview_lines, opts)
   opts = opts or require("telescope.themes").get_dropdown()
-  exec_fn = exec_fn or function() end
+  exec_fn = exec_fn or function(_) end
 
   -- Previewer logic
   local previewer = nil
