@@ -6,9 +6,7 @@ M = {}
 --- Get Spotify user
 --- @param raw boolean
 M.user = function(raw)
-  local response = curl.get({
-    url = utils.toolkit_url("/spotify/user"),
-  })
+  local response = utils.fetch("/spotify/user")
 
   if raw then
     return utils.parse(response)
@@ -20,9 +18,7 @@ end
 --- Login to Spotify
 --- @param raw boolean
 M.authenticated = function(raw)
-  local response = curl.get({
-    url = utils.toolkit_url("/spotify/authenticated"),
-  })
+  local response = utils.fetch("/spotify/authenticated")
 
   if raw then
     return utils.parse(response)
@@ -42,9 +38,7 @@ end
 --- Login to Spotify
 --- @param raw boolean
 M.login = function(raw)
-  local response = curl.get({
-    url = utils.toolkit_url("/spotify/login"),
-  })
+  local response = utils.fetch("/spotify/login")
 
   if raw then
     return utils.parse(response)
@@ -60,9 +54,7 @@ end
 --- Logoff to Spotify
 --- @param raw boolean
 M.logout = function(raw)
-  local response = curl.get({
-    url = utils.toolkit_url("/spotify/logout"),
-  })
+  local response = utils.fetch("/spotify/logout")
 
   if raw then
     return utils.parse(response)
@@ -78,9 +70,7 @@ end
 --- Pause Spotify
 --- @param raw boolean
 M.pause = function(raw)
-  local response = curl.get({
-    url = utils.toolkit_url("/spotify/pause"),
-  })
+  local response = utils.fetch("/spotify/pause")
 
   if raw then
     return utils.parse(response)
@@ -96,9 +86,7 @@ end
 --- Resume Spotify
 --- @param raw boolean
 M.resume = function(raw)
-  local response = curl.get({
-    url = utils.toolkit_url("/spotify/resume"),
-  })
+  local response = utils.fetch("/spotify/resume")
 
   if raw then
     return utils.parse(response)

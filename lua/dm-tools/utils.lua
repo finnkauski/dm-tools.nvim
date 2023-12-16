@@ -5,11 +5,24 @@ local finders = require("telescope.finders")
 local conf = require("telescope.config").values
 local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
+local curl = require("plenary.curl")
 
 -- Local
 local config = require("dm-tools.config")
 
 local M = {}
+
+--- Set keys for normal mode, mainly a convenience
+--- @param lhs string
+--- @param rhs function | string
+--- @param desc string
+M._nmap = function(lhs, rhs, desc)
+  vim.keymap.set("n", lhs, rhs, {
+    silent = true,
+    noremap = true,
+    desc = desc,
+  })
+end
 
 --- Parse the body of a response (usually has all we need and is json)
 --- @param response table
@@ -26,7 +39,15 @@ end
 --- Debug a table in a new window
 --- @param path string
 M.toolkit_url = function(path)
-  return config.get("toolkit_server_url") .. path
+  return config.values.toolkit_server_url .. path
+end
+
+--- Make a request fetcher function
+--- @param endpoint string
+M.fetch = function(endpoint)
+  curl.get({
+    url = M.toolkit_url(endpoint),
+  })
 end
 
 --- Make picker and run it
