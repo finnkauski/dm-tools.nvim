@@ -4,7 +4,6 @@ local previewers = require("telescope.previewers")
 local finders = require("telescope.finders")
 local conf = require("telescope.config").values
 local actions = require("telescope.actions")
-local action_state = require("telescope.actions.state")
 local curl = require("plenary.curl")
 
 -- Local
@@ -44,21 +43,22 @@ end
 
 --- Make a request fetcher function
 --- @param endpoint string
-M.fetch = function(endpoint)
-  curl.get({
+M.exec = function(endpoint, method)
+  method = method or "get"
+  return curl[method]({
     url = M.toolkit_url(endpoint),
   })
 end
 
 --- Make picker and run it
---- @param results table
---- @param entry_maker function
---- @param exec_fn function
---- @param gen_preview_lines function
+--- @param results table This is what is going to be the entry in the list
+--- @param entry_maker function takes a value from results, outputs entry
+--- @param attach_mappings function takes entry, does something
+--- @param gen_preview_lines function takes entry generates preview
 --- @param opts table
-M.new_picker = function(results, entry_maker, exec_fn, gen_preview_lines, opts)
+M.new_picker = function(results, entry_maker, attach_mappings, gen_preview_lines, opts)
   opts = opts or require("telescope.themes").get_dropdown()
-  exec_fn = exec_fn or function(_) end
+  attach_mappings = attach_mappings or function(_) end
 
   -- Previewer logic
   local previewer = nil
@@ -80,14 +80,7 @@ M.new_picker = function(results, entry_maker, exec_fn, gen_preview_lines, opts)
       }),
       previewer = previewer,
       sorter = conf.generic_sorter(opts),
-      attach_mappings = function(prompt_bufnr, _)
-        actions.select_default:replace(function()
-          actions.close(prompt_bufnr)
-          local selection = action_state.get_selected_entry()
-          exec_fn(selection)
-        end)
-        return true
-      end,
+      attach_mappings = attach_mappings,
     })
     :find()
 end

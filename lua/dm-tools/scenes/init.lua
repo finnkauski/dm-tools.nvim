@@ -1,5 +1,7 @@
-require("dm-tools.scenes.creator")
+require("dm-tools.scenes.generator")
 local utils = require("dm-tools.utils")
+local actions = require("telescope.actions")
+local action_state = require("telescope.actions.state")
 
 -- Top level module table
 M = {}
@@ -69,7 +71,7 @@ end
 local function get_scene(scene, raw)
   local name = scene or vim.fn.input("Scene name: ")
 
-  local response = utils.fetch("/scene/get/" .. name)
+  local response = utils.exec("/scene/get/" .. name)
 
   if raw then
     return utils.parse(response)
@@ -85,10 +87,10 @@ M.get_scene = get_scene
 --- Set new scene
 --- @param scene string
 --- @param raw boolean
-M.set_scene = function(scene, raw)
+local function set_scene(scene, raw)
   local name = scene or vim.fn.input("Scene name: ")
 
-  local response = utils.fetch("/scene/set/" .. name)
+  local response = utils.exec("/scene/set/" .. name, "put")
 
   if raw then
     return utils.parse(response)
@@ -96,6 +98,8 @@ M.set_scene = function(scene, raw)
 
   return utils.debug(response)
 end
+
+M.set_scene = set_scene
 
 --- Make a scene picker from a dictionary of scenes
 --- @param data table
@@ -106,15 +110,20 @@ local function scene_picker(data)
     table.insert(results, value)
   end
 
-  utils.new_picker(results, default_scene_entry_maker, function(entry)
-    M.set_scene(entry.value["identifier"], false)
+  utils.new_picker(results, default_scene_entry_maker, function(prompt_bufnr, _)
+    actions.select_default:replace(function()
+      actions.close(prompt_bufnr)
+      local selection = action_state.get_selected_entry()
+      set_scene(selection.value["identifier"], false)
+    end)
+    return true
   end, scene_entry_preview)
 end
 
 --- List all scenes and set the selected one
 --- @param raw boolean
 M.groups = function(raw)
-  local response = utils.fetch("/scene/groups")
+  local response = utils.exec("/scene/groups")
 
   local data = utils.parse(response).data
 
@@ -128,8 +137,13 @@ M.groups = function(raw)
       table.insert(groups, key)
     end
 
-    utils.new_picker(groups, nil, function(selection)
-      scene_picker(data[selection.value])
+    utils.new_picker(groups, nil, function(prompt_bufnr, _)
+      actions.select_default:replace(function()
+        actions.close(prompt_bufnr)
+        local selection = action_state.get_selected_entry()
+        scene_picker(data[selection.value])
+      end)
+      return true
     end, nil)
   else
     utils.debug(response)
@@ -139,7 +153,7 @@ end
 --- List all scenes and set the selected one
 --- @param raw boolean
 M.set = function(raw)
-  local response = utils.fetch("/scene/list")
+  local response = utils.exec("/scene/list")
 
   local data = utils.parse(response).data
 

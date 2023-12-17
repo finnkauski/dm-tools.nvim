@@ -6,7 +6,7 @@ M = {}
 --- Get Spotify user
 --- @param raw boolean
 M.user = function(raw)
-  local response = utils.fetch("/spotify/user")
+  local response = utils.exec("/spotify/user")
 
   if raw then
     return utils.parse(response)
@@ -18,7 +18,7 @@ end
 --- Login to Spotify
 --- @param raw boolean
 M.authenticated = function(raw)
-  local response = utils.fetch("/spotify/authenticated")
+  local response = utils.exec("/spotify/authenticated")
 
   if raw then
     return utils.parse(response)
@@ -38,7 +38,7 @@ end
 --- Login to Spotify
 --- @param raw boolean
 M.login = function(raw)
-  local response = utils.fetch("/spotify/login")
+  local response = utils.exec("/spotify/login")
 
   if raw then
     return utils.parse(response)
@@ -54,7 +54,7 @@ end
 --- Logoff to Spotify
 --- @param raw boolean
 M.logout = function(raw)
-  local response = utils.fetch("/spotify/logout")
+  local response = utils.exec("/spotify/logout")
 
   if raw then
     return utils.parse(response)
@@ -70,7 +70,7 @@ end
 --- Pause Spotify
 --- @param raw boolean
 M.pause = function(raw)
-  local response = utils.fetch("/spotify/pause")
+  local response = utils.exec("/spotify/pause")
 
   if raw then
     return utils.parse(response)
@@ -86,7 +86,7 @@ end
 --- Resume Spotify
 --- @param raw boolean
 M.resume = function(raw)
-  local response = utils.fetch("/spotify/resume")
+  local response = utils.exec("/spotify/resume")
 
   if raw then
     return utils.parse(response)

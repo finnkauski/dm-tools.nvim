@@ -1,5 +1,7 @@
 local scenes = require("dm-tools.scenes")
 local spotify = require("dm-tools.spotify")
+local lights = require("dm-tools.lights")
+
 local utils = require("dm-tools.utils")
 local config = require("dm-tools.config")
 
@@ -18,6 +20,7 @@ M.set_default_keymaps = function()
   utils._nmap("<leader>dmma", spotify.authenticated, "Check if Spotify is authenticated")
   utils._nmap("<leader>dmmp", spotify.pause, "Pause Spotify")
   utils._nmap("<leader>dmmr", spotify.resume, "Resume Spotify")
+  utils._nmap("<leader>dml", lights.all, "Get all lights")
 end
 
 --- Setup is the public method to setup your plugin
