@@ -3,7 +3,6 @@ local pickers = require("telescope.pickers")
 local previewers = require("telescope.previewers")
 local finders = require("telescope.finders")
 local conf = require("telescope.config").values
-local actions = require("telescope.actions")
 local curl = require("plenary.curl")
 
 -- Local
@@ -83,6 +82,11 @@ M.new_picker = function(results, entry_maker, attach_mappings, gen_preview_lines
       attach_mappings = attach_mappings,
     })
     :find()
+end
+
+--- Open scene directory as it is configured
+M.open_scene_directory = function()
+  vim.cmd("e" .. config.values.scene_directory)
 end
 
 return M

@@ -69,14 +69,13 @@ end
 --- @param scene table
 local function finalise(scene)
   -- new buffer in a split
-  vim.cmd("vsplit")
-  local buf = vim.api.nvim_create_buf(true, true)
+  local buf = vim.api.nvim_get_current_buf()
   local win = vim.api.nvim_get_current_win()
   vim.api.nvim_win_set_buf(win, buf)
   vim.api.nvim_set_option_value("filetype", "json", { buf = buf })
 
   -- generate and insert our template
-  vim.api.nvim_buf_set_lines(buf, 0, -1, true, table_to_lines(scene))
+  vim.api.nvim_buf_set_lines(buf, -1, -1, true, table_to_lines(scene))
 end
 
 --- Add links section to scene
@@ -139,15 +138,13 @@ local function add_lights(scene)
 end
 
 --- Generate a scene JSON representation
-local function _generate(scene, state)
-  state = state or "start"
-  scene = scene or {
+M.generate_scene = function()
+  local scene = {
     name = vim.fn.input("Name: "),
   }
 
+  -- This starts the pocess
   add_lights(scene)
 end
-
-vim.keymap.set("n", "<leader><leader>r", _generate)
 
 return M

@@ -1,10 +1,12 @@
-require("dm-tools.scenes.generator")
 local utils = require("dm-tools.utils")
 local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
 
 -- Top level module table
 M = {}
+
+-- Re-export
+M.generate_scene = require("dm-tools.scenes.generator").generate_scene
 
 --- Make default entry maker to translate a
 --- @param entry table

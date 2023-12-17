@@ -14,6 +14,8 @@ M.spotify = spotify
 M.set_default_keymaps = function()
   utils._nmap("<leader>dmsg", scenes.groups, "Groups")
   utils._nmap("<leader>dmss", scenes.set, "Scenes")
+  utils._nmap("<leader>dmsg", scenes.generate_scene, "Generate a new scene")
+  utils._nmap("<leader>dmsd", utils.open_scene_directory, "Scene directory")
   utils._nmap("<leader>dmml", spotify.login, "Login to Spotify")
   utils._nmap("<leader>dmmx", spotify.logout, "Logout from Spotify")
   utils._nmap("<leader>dmmu", spotify.user, "Get Spotify user")
