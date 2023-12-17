@@ -66,6 +66,7 @@ local function table_to_lines(tbl)
 end
 
 --- Once a scene is ready to display, do so.
+--- @param scene table
 local function finalise(scene)
   -- new buffer in a split
   vim.cmd("vsplit")
@@ -78,7 +79,8 @@ local function finalise(scene)
   vim.api.nvim_buf_set_lines(buf, 0, -1, true, table_to_lines(scene))
 end
 
---- add spotify data to scene
+--- Add links section to scene
+--- @param scene table
 local function add_links(scene)
   if string.lower(vim.fn.input("Include links? ")) == "y" then
     scene.links = {}
@@ -86,7 +88,7 @@ local function add_links(scene)
   finalise(scene)
 end
 
---- add spotify data to scene
+--- Add spotify section to scene
 local function add_spotify(scene)
   if string.lower(vim.fn.input("Include Spotify? ")) == "y" then
     scene.spotify = {
@@ -98,7 +100,8 @@ local function add_spotify(scene)
   add_links(scene)
 end
 
---- Add lights to scene using telescope
+--- Add hue lights to scene using telescope
+--- @param scene table
 local function add_lights(scene)
   if string.lower(vim.fn.input("Include Hue Lights? ")) == "y" then
     -- we need to add a table to insert into
